@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actuarial Predictor Pro - Data & Methodology</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        .math-block {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-effects">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <div class="app-container">
+        <header>
+            <h1>Actuarial Predictor <span style="color: var(--accent-2)">PRO</span></h1>
+            <p class="subtitle">Stochastic Survival Curve & Proportional Hazards Modeling</p>
+            <nav class="nav-links">
+                <a href="index.html">Predictor Pro</a>
+                <a href="data.html" class="active">Data & Methodology</a>
+            </nav>
+        </header>
+
+        <main style="display: block;">
+            
+            <section class="glass-panel" style="margin-bottom: 2rem;">
+                <h2>The Actuarial Approach</h2>
+                <p style="line-height: 1.6; margin-bottom: 1rem;">This application abandons simple "years added or subtracted" logic in favor of true actuarial mathematics. It uses the <strong>Gompertz-Makeham Law of Mortality</strong> to generate a baseline probability of death for each year, applies <strong>Proportional Hazards</strong> based on underwriting risk factors, and mathematically simulates a population from your current age to age 120 to construct a <strong>Survival Curve</strong>.</p>
+            </section>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                <section class="glass-panel">
+                    <h2>Step 1: Baseline Generation ($q_x$)</h2>
+                    <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem; color: var(--text-muted);">
+                        Instead of loading massive XML tables into the browser, we use the actuarially respected <strong>Gompertz-Makeham</strong> function to mathematically approximate the Society of Actuaries (SOA) 2015 Valuation Basic Tables (VBT).
+                    </p>
+                    <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem;">
+                        This formula calculates <strong>$q_x$</strong>, which is the exact probability that a person who has reached age $x$ will die before reaching age $x+1$.
+                    </p>
+                    
+                    <div class="math-block">
+                        $$ q_x = A + B \cdot c^x $$
+                    </div>
+
+                    <p style="font-size: 0.9rem; line-height: 1.5;">
+                        <strong>Constants (Calibrated for baseline):</strong><br>
+                        <em>A (Makeham Term):</em> Age-independent mortality (accidents).<br>
+                        <em>B & c (Gompertz Term):</em> Exponential age-dependent decline.<br>
+                        Male: <code>A=0.0003, B=0.00004, c=1.095</code><br>
+                        Female: <code>A=0.0002, B=0.00002, c=1.095</code>
+                    </p>
+                </section>
+
+                <section class="glass-panel">
+                    <h2>Step 2: Proportional Hazards</h2>
+                    <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem; color: var(--text-muted);">
+                        To account for your medical profile, we apply a <strong>Hazard Ratio</strong>. A hazard ratio is a multiplier applied to your baseline $q_x$ every single year of your life.
+                    </p>
+                    <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem;">
+                        For example, if you are a current smoker (2.5x hazard), and a healthy 40-year-old has a 0.1% chance of dying this year, your adjusted risk becomes 0.25%.
+                    </p>
+
+                    <div class="math-block">
+                        $$ Adjusted\ q_x = q_x \cdot \prod (Hazard\ Ratios) $$
+                    </div>
+                </section>
+            </div>
+
+            <section class="glass-panel" style="margin-bottom: 2rem;">
+                <h2>Step 3: Calculating Survival & Expected Value ($l_x$)</h2>
+                <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem;">
+                    Once we have your $Adjusted\ q_x$ for every year from now until age 120, we simulate a hypothetical population (called $l_x$, starting at 100,000 people). Every year, we subtract the dead ($d_x$) based on your custom probability, leaving the survivors. This generates the <strong>Survival Curve</strong> shown on your results chart.
+                </p>
+                <p style="font-size: 0.95rem; line-height: 1.5;">
+                    The <strong>Expected Age of Death</strong> is not a guess—it is mathematically derived by taking the integral (Area Under the Curve) of your Survival Curve.
+                </p>
+            </section>
+
+            <section class="glass-panel">
+                <h2>Underwriting Risk Multipliers</h2>
+                <p style="margin-bottom: 1.5rem; color: var(--text-muted); font-size: 0.95rem;">
+                    These are the exact Cumulative Hazard Ratios used in this model's codebase, mapped from standard actuarial underwriting debits/credits. A ratio of 1.0 is standard risk. Ratios > 1.0 aggressively compound mortality probability.
+                </p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--accent-1);">Medical Vitals</h3>
+                        <table>
+                            <tbody>
+                                <tr><td><strong>BMI > 35 (Severe Obesity)</strong></td><td>2.0x Risk</td></tr>
+                                <tr><td><strong>BMI > 30 (Obesity)</strong></td><td>1.5x Risk</td></tr>
+                                <tr><td><strong>High Blood Pressure</strong></td><td>1.6x Risk</td></tr>
+                                <tr><td><strong>Elevated Blood Pressure</strong></td><td>1.2x Risk</td></tr>
+                                <tr><td><strong>Type 1 Diabetes</strong></td><td>2.5x Risk</td></tr>
+                                <tr><td><strong>Type 2 Diabetes</strong></td><td>1.7x Risk</td></tr>
+                                <tr><td><strong>Family History (Early Onset)</strong></td><td>1.3x Risk</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--accent-1);">Lifestyle Habits</h3>
+                        <table>
+                            <tbody>
+                                <tr><td><strong>Current Smoker</strong></td><td>2.5x Risk</td></tr>
+                                <tr><td><strong>Former Smoker</strong></td><td>1.3x Risk</td></tr>
+                                <tr><td><strong>Heavy Alcohol</strong></td><td>1.8x Risk</td></tr>
+                                <tr><td><strong>Moderate Alcohol (J-Curve)</strong></td><td>0.95x Risk</td></tr>
+                                <tr><td><strong>Sedentary Lifestyle</strong></td><td>1.4x Risk</td></tr>
+                                <tr><td><strong>Active Lifestyle</strong></td><td>0.8x Risk</td></tr>
+                                <tr><td><strong>Highly Athletic</strong></td><td>0.7x Risk</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-panel" style="margin-top: 2rem;">
+                <h2>References & Source Data</h2>
+                <p style="margin-bottom: 1rem; font-size: 0.95rem; color: var(--text-muted);">
+                    This mathematical model relies on proportional hazards drawn from widely accepted clinical studies and actuarial data repositories. You can review the primary source tables below:
+                </p>
+                
+                <ul style="line-height: 1.8; margin-left: 1.5rem; font-size: 0.95rem;">
+                    <li><strong>Baseline Mortality (VBT):</strong> The Society of Actuaries (SOA) Mortality and Other Rate Tables (MORT). <a href="https://mort.soa.org/" target="_blank" style="color: var(--accent-2); text-decoration: none;">View the 2015 Valuation Basic Tables here</a>.</li>
+                    <li><strong>Smoking & Mortality:</strong> CDC Fact Sheet on Tobacco-Related Mortality. <a href="https://www.cdc.gov/tobacco/data_statistics/fact_sheets/health_effects/tobacco_related_mortality/index.htm" target="_blank" style="color: var(--accent-2); text-decoration: none;">View CDC Data</a>.</li>
+                    <li><strong>Obesity & BMI Hazard:</strong> CDC Data on the Adult Obesity Epidemic and all-cause mortality. <a href="https://www.cdc.gov/obesity/index.html" target="_blank" style="color: var(--accent-2); text-decoration: none;">View CDC Report</a>.</li>
+                    <li><strong>Blood Pressure:</strong> American Heart Association (AHA) statistics on hypertension and cardiovascular hazard risk. <a href="https://www.heart.org/en/health-topics/high-blood-pressure" target="_blank" style="color: var(--accent-2); text-decoration: none;">View AHA Guidelines</a>.</li>
+                    <li><strong>Diabetes:</strong> American Diabetes Association (ADA) statistics on Type 1 & Type 2 mortality impacts. <a href="https://diabetes.org/" target="_blank" style="color: var(--accent-2); text-decoration: none;">View ADA Statistics</a>.</li>
+                </ul>
+            </section>
+
+        </main>
+        
+        <!-- Creator Badge -->
+        <footer class="creator-badge">
+            <img src="profile.png" alt="Hillel Orgel">
+            <div>
+                Built by <a href="https://www.linkedin.com/in/hillelorgel" target="_blank">Hillel Orgel</a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
