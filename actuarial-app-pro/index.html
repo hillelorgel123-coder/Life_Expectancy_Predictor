@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actuarial Predictor Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid var(--glass-border);
+        }
+    </style>
+</head>
+<body>
+    <div class="background-effects">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <div class="app-container">
+        <header>
+            <h1>Actuarial Predictor <span style="color: var(--accent-2)">PRO</span></h1>
+            <p class="subtitle">Stochastic Survival Curve & Proportional Hazards Modeling</p>
+            <nav class="nav-links">
+                <a href="index.html" class="active">Predictor Pro</a>
+                <a href="data.html">Data & Methodology</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="glass-panel form-section">
+                <h2>Underwriting Profile</h2>
+                <form id="friend-form">
+                    <div class="input-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" required placeholder="e.g. John Doe">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="input-group half">
+                            <label for="age">Current Age</label>
+                            <input type="number" id="age" required min="1" max="110" value="30">
+                        </div>
+                        <div class="input-group half">
+                            <label for="sex">Biological Sex</label>
+                            <select id="sex" required>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group half">
+                            <label for="height">Height (inches)</label>
+                            <input type="number" id="height" required min="30" max="100" value="70">
+                        </div>
+                        <div class="input-group half">
+                            <label for="weight">Weight (lbs)</label>
+                            <input type="number" id="weight" required min="50" max="500" value="160">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group third">
+                            <label for="smoking">Smoking</label>
+                            <select id="smoking" required>
+                                <option value="never">Never</option>
+                                <option value="former">Former</option>
+                                <option value="current">Current</option>
+                            </select>
+                        </div>
+                        <div class="input-group third">
+                            <label for="alcohol">Alcohol</label>
+                            <select id="alcohol" required>
+                                <option value="none">None/Rare</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="heavy">Heavy</option>
+                            </select>
+                        </div>
+                        <div class="input-group third">
+                            <label for="exercise">Exercise</label>
+                            <select id="exercise" required>
+                                <option value="active">Active</option>
+                                <option value="sedentary">Sedentary</option>
+                                <option value="athletic">Athletic</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group third">
+                            <label for="bloodPressure">Blood Pressure</label>
+                            <select id="bloodPressure" required>
+                                <option value="normal">Normal</option>
+                                <option value="elevated">Elevated</option>
+                                <option value="high">High/Hypertension</option>
+                            </select>
+                        </div>
+                        <div class="input-group third">
+                            <label for="diabetes">Diabetes</label>
+                            <select id="diabetes" required>
+                                <option value="none">None</option>
+                                <option value="type2">Type 2</option>
+                                <option value="type1">Type 1</option>
+                            </select>
+                        </div>
+                        <div class="input-group third">
+                            <label for="familyHistory">Family History (Early)</label>
+                            <select id="familyHistory" required>
+                                <option value="no">No</option>
+                                <option value="yes">Yes (Heart/Cancer)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Generate Actuarial Model</button>
+                </form>
+            </section>
+
+            <section class="glass-panel list-section">
+                <h2>Modeled Profiles</h2>
+                <div id="profiles-list" class="profiles-list">
+                    <!-- Profiles will be injected here -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Modal for Visualizer -->
+        <div id="visualizer-modal" class="modal hidden">
+            <div class="modal-content glass-panel" style="max-width: 800px; width: 95%;">
+                <button id="close-modal" class="close-btn">&times;</button>
+                
+                <div id="visualizer-content">
+                    <div class="visualizer-header" style="text-align: center; margin-bottom: 1rem;">
+                        <p style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem;">Stochastic Projection For</p>
+                        <h2 id="modal-name" style="font-size: 2.5rem; background: linear-gradient(to right, var(--accent-1), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Name</h2>
+                    </div>
+
+                    <div class="stat-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                        <div class="stat-box">
+                            <div class="stat-label">Expected Age of Death</div>
+                            <div class="stat-value" id="modal-expected-age">0</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Statistical Years Left</div>
+                            <div class="stat-value" id="modal-years-left" style="color: var(--primary);">0</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Cumulative Hazard Ratio</div>
+                            <div class="stat-value" id="modal-hazard" style="color: var(--danger);">1.0x</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="survivalChart"></canvas>
+                    </div>
+
+                    <div class="risk-factors">
+                        <h4>Underwriting Adjustments</h4>
+                        <ul class="risk-factor-list" id="modal-adjustments">
+                        </ul>
+                    </div>
+
+                    <div class="modal-actions" style="margin-top: 1.5rem; text-align: center;">
+                        <button id="edit-profile-btn" class="btn-secondary">Edit Profile</button>
+                        <button id="delete-profile-btn" class="btn-danger">Delete Profile</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Creator Badge -->
+        <footer class="creator-badge">
+            <img src="profile.png" alt="Hillel Orgel">
+            <div>
+                Built by <a href="https://www.linkedin.com/in/hillelorgel" target="_blank">Hillel Orgel</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="vbt.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
