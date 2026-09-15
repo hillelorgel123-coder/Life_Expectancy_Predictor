@@ -114,6 +114,22 @@ main {
     main {
         grid-template-columns: 1fr;
     }
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    .input-group {
+        margin-bottom: 1rem;
+    }
+    .stat-grid {
+        grid-template-columns: 1fr;
+    }
+    .risk-factor-list {
+        grid-template-columns: 1fr;
+    }
+    h1 {
+        font-size: 2.5rem;
+    }
 }
 
 /* Glassmorphism */

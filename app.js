@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const deleteProfileBtn = document.getElementById('delete-profile-btn');
     
     let chartInstance = null;
-    let profiles = JSON.parse(localStorage.getItem('actuarial_profiles_pro')) || [];
+    let profiles = []; // Session-only array, no localStorage for privacy
     let editingProfileId = null;
     let currentViewingProfile = null;
 
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function saveProfiles() {
-        localStorage.setItem('actuarial_profiles_pro', JSON.stringify(profiles));
+        // Disabled localStorage saving for public privacy
     }
 
     function renderProfiles() {
