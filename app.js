@@ -111,6 +111,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const deleteProfileBtn = document.getElementById('delete-profile-btn');
+    if (deleteProfileBtn) {
+        deleteProfileBtn.addEventListener('click', () => {
+            if (currentViewingProfile && currentViewingProfile.id !== '1' && currentViewingProfile.id !== '2') {
+                if(confirm("Delete this profile?")) {
+                    profiles = profiles.filter(p => p.id !== currentViewingProfile.id);
+                    saveProfiles();
+                    renderProfiles();
+                    modal.classList.remove('active');
+                }
+            }
+        });
+    }
+
     closeModalBtn.addEventListener('click', () => {
         modal.classList.remove('active');
     });
@@ -132,7 +146,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const sorted = [...profiles].sort((a, b) => b.id - a.id);
+        const sorted = [...profiles].sort((a, b) => {
+            const aIsExample = (a.id === '1' || a.id === '2');
+            const bIsExample = (b.id === '1' || b.id === '2');
+            if (aIsExample && !bIsExample) return -1;
+            if (!aIsExample && bIsExample) return 1;
+            if (aIsExample && bIsExample) return a.id.localeCompare(b.id);
+            return b.id - a.id;
+        });
+        
         sorted.forEach(profile => {
             const card = document.createElement('div');
             card.className = 'profile-card';
@@ -155,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (profile.id !== '1' && profile.id !== '2') {
                 const delBtn = document.createElement('button');
                 delBtn.className = 'profile-delete';
-                delBtn.innerHTML = '&times;';
+                delBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
                 delBtn.title = 'Delete Profile';
                 delBtn.addEventListener('click', (e) => {
                     e.stopPropagation(); // prevent modal from opening
@@ -176,6 +198,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function showVisualizer(profile) {
         currentViewingProfile = profile;
         const results = simulateSurvivalCurve(profile);
+
+        // Hide delete button in modal if it's an example
+        const modalDelBtn = document.getElementById('delete-profile-btn');
+        if (modalDelBtn) {
+            if (profile.id === '1' || profile.id === '2') {
+                modalDelBtn.style.display = 'none';
+            } else {
+                modalDelBtn.style.display = 'inline-block';
+            }
+        }
 
         // Update Text Stats
         modalName.textContent = profile.name;

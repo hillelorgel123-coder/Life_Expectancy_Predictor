@@ -244,18 +244,21 @@ input:focus, select:focus {
 }
 
 .profile-delete {
-    background: transparent;
-    border: none;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
     color: var(--danger);
     cursor: pointer;
     padding: 0.5rem;
-    font-size: 1.2rem;
-    opacity: 0.6;
-    transition: opacity 0.2s;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
 }
 
 .profile-delete:hover {
-    opacity: 1;
+    background: var(--danger);
+    color: white;
 }
 
 /* Modal */
