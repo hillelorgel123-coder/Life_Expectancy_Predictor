@@ -16,7 +16,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const deleteProfileBtn = document.getElementById('delete-profile-btn');
     
     let chartInstance = null;
-    let profiles = []; // Session-only array, no localStorage for privacy
+    let profiles = [
+        {
+            id: '2',
+            name: 'The Ironman (Healthy Example)',
+            age: 30,
+            sex: 'female',
+            height: 65,
+            weight: 130,
+            smoking: 'never',
+            alcohol: 'moderate',
+            exercise: 'athletic',
+            bloodPressure: 'normal',
+            diabetes: 'none',
+            familyHistory: 'no',
+            timestamp: new Date().toISOString()
+        },
+        {
+            id: '1',
+            name: 'The Hazard (High Risk Example)',
+            age: 30,
+            sex: 'male',
+            height: 70,
+            weight: 280,
+            smoking: 'current',
+            alcohol: 'heavy',
+            exercise: 'sedentary',
+            bloodPressure: 'high',
+            diabetes: 'type2',
+            familyHistory: 'yes',
+            timestamp: new Date().toISOString()
+        }
+    ]; // Session-only array with pre-loaded examples
     let editingProfileId = null;
     let currentViewingProfile = null;
 
