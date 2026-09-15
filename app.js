@@ -111,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const deleteProfileBtn = document.getElementById('delete-profile-btn');
     if (deleteProfileBtn) {
         deleteProfileBtn.addEventListener('click', () => {
             if (currentViewingProfile && currentViewingProfile.id !== '1' && currentViewingProfile.id !== '2') {
