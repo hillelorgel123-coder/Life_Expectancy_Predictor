@@ -142,16 +142,23 @@ function simulateSurvivalCurve(profile) {
     const curveData = [];
 
     // Push the starting state (100% survival at current age)
+    let initialBaseQx = getBaselineQx(startAge, profile.sex);
+    let initialBasePx = 1 - initialBaseQx;
+    let initialAdjustedPx = Math.pow(initialBasePx, hazardData.totalHazard);
+    let initialAdjustedQx = 1 - initialAdjustedPx;
+
     curveData.push({
         age: startAge,
         probability: 100.0,
-        qx: getBaselineQx(startAge, profile.sex) * hazardData.totalHazard
+        qx: initialAdjustedQx
     });
 
     for (let currentAge = startAge; currentAge < maxAge; currentAge++) {
         // Calculate probability of dying this year
         let baseQx = getBaselineQx(currentAge, profile.sex);
-        let adjustedQx = Math.min(baseQx * hazardData.totalHazard, 1.0);
+        let basePx = 1 - baseQx;
+        let adjustedPx = Math.pow(basePx, hazardData.totalHazard);
+        let adjustedQx = 1 - adjustedPx;
         
         // Number of people who die this year
         let dx = lx * adjustedQx;

@@ -70,15 +70,26 @@
 
                 <section class="glass-panel">
                     <h2>Step 2: Proportional Hazards</h2>
+                    
+                    <h3 style="font-size: 1.1rem; color: var(--accent-1); margin-bottom: 0.5rem;">The Simple Explanation</h3>
+                    <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem; color: var(--text-muted);">
+                        Imagine your baseline chance of surviving the upcoming year is 99%. If you have a severe health risk (like being a heavy smoker), our model assigns you a "Hazard Ratio" of 2.0. Instead of doing clumsy math, the model treats this hazard as if you have to survive that 99% chance <strong>twice</strong> in the same year ($0.99 \times 0.99 \approx 98\%$). The more medical risks you stack up, the more "survival dice" you have to successfully roll every single year. This elegantly simulates how compounding health issues drain your longevity.
+                    </p>
+
+                    <h3 style="font-size: 1.1rem; color: var(--accent-1); margin-bottom: 0.5rem;">The Actuarial Mathematics</h3>
                     <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem; color: var(--text-muted);">
-                        To account for your medical profile, we apply a <strong>Hazard Ratio</strong>. A hazard ratio is a multiplier applied to your baseline $q_x$ every single year of your life.
+                        For actuarial professionals: To properly account for a subject's medical profile, we apply a <strong>Cumulative Hazard Ratio</strong>. Instead of linearly multiplying the mortality rate ($q_x$)—which artificially caps out and fails for high-risk profiles—we apply the hazard ratio exponentially to the <strong>probability of survival</strong> ($p_x$). 
                     </p>
                     <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem;">
-                        For example, if you are a current smoker (2.5x hazard), and a healthy 40-year-old has a 0.1% chance of dying this year, your adjusted risk becomes 0.25%.
+                        By raising the baseline survival probability ($1 - q_x$) to the power of the cumulative hazard ratio, we naturally bound the probability between 0 and 100%. This accurately reflects a true proportional hazards survival model.
                     </p>
 
                     <div class="math-block">
-                        $$ Adjusted\ q_x = q_x \cdot \prod (Hazard\ Ratios) $$
+                        $$ p_x = 1 - q_x $$
+                        <br>
+                        $$ Adjusted\ p_x = p_x^{\prod (Hazard\ Ratios)} $$
+                        <br>
+                        $$ Adjusted\ q_x = 1 - Adjusted\ p_x $$
                     </div>
                 </section>
             </div>
