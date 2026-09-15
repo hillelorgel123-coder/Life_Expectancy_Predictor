@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let profiles = [
         {
             id: '2',
-            name: 'The Ironman (Healthy Example)',
+            name: 'Low Risk Example',
             age: 30,
             sex: 'female',
             height: 65,
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             id: '1',
-            name: 'The Hazard (High Risk Example)',
+            name: 'High Risk Example',
             age: 30,
             sex: 'male',
             height: 70,
@@ -111,19 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (deleteProfileBtn) {
-        deleteProfileBtn.addEventListener('click', () => {
-            if (currentViewingProfile) {
-                if(confirm("Delete this profile?")) {
-                    profiles = profiles.filter(p => p.id !== currentViewingProfile.id);
-                    saveProfiles();
-                    renderProfiles();
-                    modal.classList.remove('active');
-                }
-            }
-        });
-    }
-
     closeModalBtn.addEventListener('click', () => {
         modal.classList.remove('active');
     });
@@ -163,6 +150,24 @@ document.addEventListener('DOMContentLoaded', () => {
             info.appendChild(detailsEl);
             
             card.appendChild(info);
+
+            // Add delete button directly to the card (except for examples)
+            if (profile.id !== '1' && profile.id !== '2') {
+                const delBtn = document.createElement('button');
+                delBtn.className = 'profile-delete';
+                delBtn.innerHTML = '&times;';
+                delBtn.title = 'Delete Profile';
+                delBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // prevent modal from opening
+                    if(confirm("Delete this profile?")) {
+                        profiles = profiles.filter(p => p.id !== profile.id);
+                        saveProfiles();
+                        renderProfiles();
+                    }
+                });
+                card.appendChild(delBtn);
+            }
+
             card.addEventListener('click', () => showVisualizer(profile));
             profilesList.appendChild(card);
         });
