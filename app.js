@@ -121,10 +121,15 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const info = document.createElement('div');
             info.className = 'profile-info';
-            info.innerHTML = `
-                <h3>${profile.name}</h3>
-                <p>${profile.age}yo ${profile.sex === 'male' ? 'Male' : 'Female'} • Pro Projection</p>
-            `;
+            
+            const nameEl = document.createElement('h3');
+            nameEl.textContent = profile.name;
+            
+            const detailsEl = document.createElement('p');
+            detailsEl.textContent = `${profile.age}yo ${profile.sex === 'male' ? 'Male' : 'Female'} • Pro Projection`;
+            
+            info.appendChild(nameEl);
+            info.appendChild(detailsEl);
             
             card.appendChild(info);
             card.addEventListener('click', () => showVisualizer(profile));
