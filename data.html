@@ -47,12 +47,12 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
                 <section class="glass-panel">
-                    <h2>Step 1: Baseline Generation ($q_x$)</h2>
+                    <h2>Step 1: Baseline Generation (\(q_x\))</h2>
                     <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem; color: var(--text-muted);">
                         Instead of loading massive XML tables into the browser, we use the actuarially respected <strong>Gompertz-Makeham</strong> function to mathematically approximate the Society of Actuaries (SOA) 2015 Valuation Basic Tables (VBT).
                     </p>
                     <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem;">
-                        This formula calculates <strong>$q_x$</strong>, which is the exact probability that a person who has reached age $x$ will die before reaching age $x+1$.
+                        This formula calculates <strong>\(q_x\)</strong>, which is the exact probability that a person who has reached age \(x\) will die before reaching age \(x+1\).
                     </p>
                     
                     <div class="math-block">
@@ -73,15 +73,15 @@
                     
                     <h3 style="font-size: 1.1rem; color: var(--accent-1); margin-bottom: 0.5rem;">The Simple Explanation</h3>
                     <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem; color: var(--text-muted);">
-                        Imagine your baseline chance of surviving the upcoming year is 99%. If you have a severe health risk (like being a heavy smoker), our model assigns you a "Hazard Ratio" of 2.0. Instead of doing clumsy math, the model treats this hazard as if you have to survive that 99% chance <strong>twice</strong> in the same year ($0.99 \times 0.99 \approx 98\%$). The more medical risks you stack up, the more "survival dice" you have to successfully roll every single year. This elegantly simulates how compounding health issues drain your longevity.
+                        Imagine your baseline chance of surviving the upcoming year is 99%. If you have a severe health risk, such as being a heavy smoker, our model assigns you a "Hazard Ratio" of 2.0. The model treats this hazard as if you must survive that 99% probability twice in the same year (0.99 × 0.99 ≈ 98%). As medical risks accumulate, you must effectively clear this statistical hurdle multiple times each year. This models how compounding health issues impact overall longevity over time.
                     </p>
 
                     <h3 style="font-size: 1.1rem; color: var(--accent-1); margin-bottom: 0.5rem;">The Actuarial Mathematics</h3>
                     <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem; color: var(--text-muted);">
-                        For actuarial professionals: To properly account for a subject's medical profile, we apply a <strong>Cumulative Hazard Ratio</strong>. Instead of linearly multiplying the mortality rate ($q_x$)—which artificially caps out and fails for high-risk profiles—we apply the hazard ratio exponentially to the <strong>probability of survival</strong> ($p_x$). 
+                        For actuarial professionals: To properly account for a subject's medical profile, we apply a <strong>Cumulative Hazard Ratio</strong>. Instead of linearly multiplying the mortality rate (\(q_x\)), which artificially caps out and fails for high-risk profiles, we apply the hazard ratio exponentially to the <strong>probability of survival</strong> (\(p_x\)). 
                     </p>
                     <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem;">
-                        By raising the baseline survival probability ($1 - q_x$) to the power of the cumulative hazard ratio, we naturally bound the probability between 0 and 100%. This accurately reflects a true proportional hazards survival model.
+                        By raising the baseline survival probability (\(1 - q_x\)) to the power of the cumulative hazard ratio, we naturally bound the probability between 0 and 100%. This accurately reflects a true proportional hazards survival model.
                     </p>
 
                     <div class="math-block">
@@ -95,12 +95,12 @@
             </div>
 
             <section class="glass-panel" style="margin-bottom: 2rem;">
-                <h2>Step 3: Calculating Survival & Expected Value ($l_x$)</h2>
+                <h2>Step 3: Calculating Survival & Expected Value (\(l_x\))</h2>
                 <p style="font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem;">
-                    Once we have your $Adjusted\ q_x$ for every year from now until age 120, we simulate a hypothetical population (called $l_x$, starting at 100,000 people). Every year, we subtract the dead ($d_x$) based on your custom probability, leaving the survivors. This generates the <strong>Survival Curve</strong> shown on your results chart.
+                    Once we have your adjusted \(q_x\) for every year from now until age 120, we simulate a hypothetical population (called \(l_x\), starting at 100,000 people). Every year, we subtract the dead (\(d_x\)) based on your custom probability, leaving the survivors. This generates the <strong>Survival Curve</strong> shown on your results chart.
                 </p>
                 <p style="font-size: 0.95rem; line-height: 1.5;">
-                    The <strong>Expected Age of Death</strong> is not a guess—it is mathematically derived by taking the integral (Area Under the Curve) of your Survival Curve.
+                    The <strong>Expected Age of Death</strong> is mathematically derived by taking the integral (Area Under the Curve) of your Survival Curve.
                 </p>
             </section>
 
